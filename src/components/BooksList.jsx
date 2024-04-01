@@ -1,4 +1,8 @@
-const BooksList = ({ books, onBookClick }) => {
+import { Component } from "react";
+
+class BooksList extends Component {
+  render() {
+  const { books, onBookClick } = this.props;
   return (
     <ul className="books-container">
       {books.map((book) => (
@@ -21,7 +25,8 @@ const BooksList = ({ books, onBookClick }) => {
         </li>
       ))}
     </ul>
-  );
+    );
+  }
 };
 
 export default BooksList;
