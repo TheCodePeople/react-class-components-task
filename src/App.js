@@ -1,49 +1,50 @@
-import { useState } from "react";
-
+import { Component } from "react";
 import BookDetails from "./components/BookDetails";
 import BookSearch from "./components/BookSearch";
 
 import "./App.css";
 import BooksList from "./components/BooksList";
-
-const App = () => {
-  const [books, setBooks] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
-
-  const searchBooks = async (query) => {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: [],
+      selectedBook: null,
+    };
+  }
+  searchBooks = async (query) => {
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${query}`
       );
-
       const booksData = await response.json();
-
-      setBooks(booksData.items);
+      this.setState({
+        books: booksData.items,
+      });
     } catch (error) {
       console.error("Error fetching books:", error);
     }
   };
-
-  const handleBookClick = (book) => {
-    setSelectedBook(book);
+  handleBookClick = (book) => {
+    this.setState({
+      selectedBook: book,
+    });
   };
-
-  return (
-    <div className="app-container">
-      <header className="title-container">
-        <h1 className="title">Books Search</h1>
-      </header>
-
-      <BookSearch onBookSearch={searchBooks} />
-
-      <BookDetails
-        selectedBook={selectedBook}
-        onClose={() => setSelectedBook(null)}
-      />
-
-      <BooksList books={books} onBookClick={handleBookClick} />
-    </div>
-  );
-};
-
+  render() {
+    const { books, selectedBook } = this.state;
+    return (
+      <div className="app-container">
+        <header className="title-container">
+          <h1 className="title">Books Search</h1>
+        </header>
+        <BookSearch onBookSearch={this.searchBooks} />
+        <BookDetails
+          selectedBook={selectedBook}
+          onClose={() => this.setState({ selectedBook: null })}
+        />
+        <BooksList books={books} onBookClick={this.handleBookClick} />
+      </div>
+    );
+  }
+}
 export default App;
