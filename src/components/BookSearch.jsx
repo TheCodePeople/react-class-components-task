@@ -1,37 +1,41 @@
-import { useState } from "react";
+import { Component } from "react";
 
-const BookSearch = ({ onBookSearch }) => {
-  const [query, setQuery] = useState("");
+export default class BookSearch extends Component {
+  state={
+    query:""
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    if (!query.trim()) {
-      return;
-    }
+   handleSubmit = (e) => {
+        e.preventDefault();
+    
+        if (!this.state.query.trim()) {
+          return;
+        }
+    
+        this.props.onBookSearch(this.state.query);
+    
+        this.setState({query:""});
+      };
+    
+       handleInputChange = (e) => {
+        this.setState({query: e.target.value});
+      };
 
-    onBookSearch(query);
-
-    setQuery("");
-  };
-
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-  };
-
-  return (
-    <form className="search-container" onSubmit={handleSubmit}>
-      <input
-        className="search-input"
-        type="text"
-        placeholder="Search for books..."
-        value={query}
-        onChange={handleInputChange}
-      />
-      <button type="submit" className="search-button">
-        Search
-      </button>
-    </form>
-  );
-};
-export default BookSearch;
+  render(){
+    return (
+          <form className="search-container" onSubmit={this.handleSubmit}>
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Search for books..."
+              value={this.state.query}
+              onChange={this.handleInputChange}
+            />
+            <button type="submit" className="search-button">
+              Search
+            </button>
+          </form>
+        );
+  }
+}
