@@ -1,37 +1,44 @@
-import { useState } from "react";
-
-const BookSearch = ({ onBookSearch }) => {
-  const [query, setQuery] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!query.trim()) {
-      return;
-    }
-
-    onBookSearch(query);
-
-    setQuery("");
+import { Component } from "react";
+class BookSearch extends Component{
+  constructor(props){
+  super(props);
+  this.state={
+   query: ''    
   };
+  
+}
+handleSubmit = (e) => {
+  e.preventDefault();
+  const { query } = this.state;
+  if (!query.trim()) {
+    return;
+  }
 
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-  };
+  const { onBookSearch } = this.props;
+  onBookSearch(query);
 
-  return (
-    <form className="search-container" onSubmit={handleSubmit}>
-      <input
-        className="search-input"
-        type="text"
-        placeholder="Search for books..."
-        value={query}
-        onChange={handleInputChange}
-      />
-      <button type="submit" className="search-button">
-        Search
-      </button>
-    </form>
-  );
+  this.setState({ query: '' });
 };
+    handleInputChange = (e) => {
+      this.setState({ query: e.target.value });
+    };
+  
+    render() {
+      const { query } = this.state;
+      return (
+        <form className="search-container" onSubmit={this.handleSubmit}>
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search for books..."
+            value={query}
+            onChange={this.handleInputChange}
+          />
+          <button type="submit" className="search-button">
+            Search
+          </button>
+        </form>
+      );
+    }
+  }
 export default BookSearch;
