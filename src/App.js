@@ -2,48 +2,51 @@ import { useState } from "react";
 
 import BookDetails from "./components/BookDetails";
 import BookSearch from "./components/BookSearch";
-
+import { Component } from "react";
 import "./App.css";
 import BooksList from "./components/BooksList";
 
-const App = () => {
-  const [books, setBooks] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
+export default class App extends Component {
+  state = {
+    books: [],
+    selectedBook: null,
+  };
 
-  const searchBooks = async (query) => {
+  searchBooks = async (query) => {
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${query}`
       );
 
       const booksData = await response.json();
-
-      setBooks(booksData.items);
+      this.setState({ books: booksData.items });
     } catch (error) {
       console.error("Error fetching books:", error);
     }
   };
 
-  const handleBookClick = (book) => {
-    setSelectedBook(book);
+  handleBookClick = (book) => {
+    this.setState({ selectedBook: book });
   };
 
-  return (
-    <div className="app-container">
-      <header className="title-container">
-        <h1 className="title">Books Search</h1>
-      </header>
+  render() {
+    const { books, selectedBook } = this.state;
 
-      <BookSearch onBookSearch={searchBooks} />
+    return (
+      <div className="app-container">
+        <header className="title-container">
+          <h1 className="title">Books Search</h1>
+        </header>
 
-      <BookDetails
-        selectedBook={selectedBook}
-        onClose={() => setSelectedBook(null)}
-      />
+        <BookSearch onBookSearch={this.searchBooks} />
 
-      <BooksList books={books} onBookClick={handleBookClick} />
-    </div>
-  );
-};
+        <BookDetails
+          selectedBook={selectedBook}
+          onClose={() => this.setState({ selectedBook: null })}
+        />
 
-export default App;
+        <BooksList books={books} onBookClick={this.handleBookClick} />
+      </div>
+    );
+  }
+}
