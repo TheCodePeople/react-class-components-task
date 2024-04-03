@@ -1,5 +1,11 @@
-const BookDetails = ({ selectedBook, onClose }) => (
-  <div
+
+import { Component } from "react";
+class BookDetails extends  Component {
+  render(){
+    const {selectedBook,onClose}=this.props;
+    return (
+
+ <div
     className={`book-details-modal ${selectedBook ? "visible" : ""}`}
     onClick={onClose}
   >
@@ -30,6 +36,9 @@ const BookDetails = ({ selectedBook, onClose }) => (
       </div>
     )}
   </div>
+
 );
+    };
+    }
 
 export default BookDetails;
